@@ -62,7 +62,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  MainAxisAlignment _alignment = MainAxisAlignment.center;
 
   void _incrementCounter() {
     setState(() {
@@ -71,7 +71,12 @@ class _MyHomePageState extends State<MyHomePage> {
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
-      _counter++;
+      if (_alignment == MainAxisAlignment.start) {
+        _alignment = MainAxisAlignment.center;
+      }
+      else if (_alignment == MainAxisAlignment.center) {
+        _alignment = MainAxisAlignment.end;
+      }
     });
   }
 
@@ -82,7 +87,12 @@ class _MyHomePageState extends State<MyHomePage> {
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
-      _counter--;
+      if (_alignment == MainAxisAlignment.end) {
+        _alignment = MainAxisAlignment.center;
+      }
+      else if (_alignment == MainAxisAlignment.center) {
+        _alignment = MainAxisAlignment.start;
+      }
     });
   }
 
@@ -103,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
-        child: Column(
+        child: Row(
           // Column is also a layout widget. It takes a list of children and
           // arranges them vertically. By default, it sizes itself to fit its
           // children horizontally, and tries to be as tall as its parent.
@@ -118,10 +128,12 @@ class _MyHomePageState extends State<MyHomePage> {
           // center the children vertically; the main axis here is the vertical
           // axis because Columns are vertical (the cross axis would be
           // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: _alignment,
           children: <Widget>[
             Image.asset(
                 "assets/images/butters.jpg",
+              width: 250,
+              height: 250
             ),
           ],
         ),
@@ -132,12 +144,12 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           FloatingActionButton(
             onPressed: _decrementCounter,
-            tooltip: 'Decrement',
+            tooltip: 'Move Left',
             child: Icon(Icons.arrow_left),
           ),
           FloatingActionButton(
             onPressed: _incrementCounter,
-            tooltip: 'Increment',
+            tooltip: 'Move Right',
             child: Icon(Icons.arrow_right),
           ),
         ]
