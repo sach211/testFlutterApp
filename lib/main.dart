@@ -65,8 +65,12 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String _imgPath = "assets/images/";
   List<String> _profiles = ['butters.jpg', 'sach.png', 'roland.png'];
+  List<String> _desc = ['... Wokay!', 'Tra la la', 'LeetCode is Lyf \nDmitri is my BFF <3'];
 
   int _profileIndex = 1;
+  MainAxisAlignment _profileAlignment = MainAxisAlignment.center;
+
+  bool _show = true;
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     String _curProfile = _imgPath + _profiles[_profileIndex];
+    String _curDesc = _desc[_profileIndex];
 
     return Scaffold(
       appBar: AppBar(
@@ -88,30 +93,42 @@ class _MyHomePageState extends State<MyHomePage> {
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: SwipeDetector(
-          child: Row(
-            // Column is also a layout widget. It takes a list of children and
-            // arranges them vertically. By default, it sizes itself to fit its
-            // children horizontally, and tries to be as tall as its parent.
-            //
-            // Invoke "debug painting" (press "p" in the console, choose the
-            // "Toggle Debug Paint" action from the Flutter Inspector in Android
-            // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-            // to see the wireframe for each widget.
-            //
-            // Column has various properties to control how it sizes itself and
-            // how it positions its children. Here we use mainAxisAlignment to
-            // center the children vertically; the main axis here is the vertical
-            // axis because Columns are vertical (the cross axis would be
-            // horizontal).
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image.asset(
-                  _curProfile,
-                width: 250,
-                height: 250
-              ),
-            ],
-          ),
+          child: Column(
+              // Column is also a layout widget. It takes a list of children and
+              // arranges them vertically. By default, it sizes itself to fit its
+              // children horizontally, and tries to be as tall as its parent.
+              //
+              // Invoke "debug painting" (press "p" in the console, choose the
+              // "Toggle Debug Paint" action from the Flutter Inspector in Android
+              // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
+              // to see the wireframe for each widget.
+              //
+              // Column has various properties to control how it sizes itself and
+              // how it positions its children. Here we use mainAxisAlignment to
+              // center the children vertically; the main axis here is the vertical
+              // axis because Columns are vertical (the cross axis would be
+              // horizontal).
+              mainAxisAlignment: _profileAlignment,
+              children: <Widget>[
+                if (_show) Image.asset(
+                    _curProfile,
+                  width: 250,
+                  height: 250
+                ),
+                if (!_show) RichText(
+                  text: TextSpan(
+                    style: DefaultTextStyle.of(context).style,
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: _curDesc,
+                        style: TextStyle(color: Colors.black.withOpacity(0.6), fontSize: 40),
+
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           onSwipeRight: () {
             setState(() {
               _profileIndex = (_profileIndex + 1)%_profiles.length;
@@ -124,6 +141,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 _profileIndex = _profiles.length;
               }
               _profileIndex = _profileIndex - 1;
+            });
+          },
+          onSwipeUp: () {
+            setState(() {
+              _profileAlignment = MainAxisAlignment.start;
+              _show = false;
+            });
+            },
+          onSwipeDown: () {
+            setState(() {
+              _profileAlignment = MainAxisAlignment.center;
+              _show = true;
             });
           },
         ),
